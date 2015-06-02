@@ -10,7 +10,7 @@ Tested on GO 1.4.2 (min probably 1.3)
 ```
 go get github.com/skonefal/dust-tail
 go build
-./dust=tail
+./dust-tail
 ```
 
 ## Usage
