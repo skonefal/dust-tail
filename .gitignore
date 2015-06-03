@@ -1,3 +1,8 @@
+# Dust Tail artifacts
+dust-tail
+results/*
+
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a

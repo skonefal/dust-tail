@@ -36,4 +36,6 @@ Results will be stored in _EXPERIMENT_RESULTS_FOLDER_ in form _endpoint-node-nam
 localhost_2015-06-03 00:37:18.755666406 +0200 CEST
 ```
 
-Results are stored as raw JSON from endpoint (so, there are multiple arrays of executor usage statistics)
+Results are stored as JSON array of arrays of executor resource usage.
+
+Example result: http://pastebin.com/mT5bpDMp

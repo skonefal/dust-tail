@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"path"
 	"regexp"
 	"time"
 )
@@ -13,7 +12,7 @@ import (
 const (
 	SAMPLING_TIME             = 1 * time.Second        // interval between sampling
 	HTTP_TIMEOUT              = 200 * time.Millisecond // endpoint timeout
-	EXPERIMENT_TIME           = 60 * time.Second       //
+	EXPERIMENT_TIME           = 3 * time.Second        //
 	EXPERIMENT_RESULTS_FOLDER = "results"              // folder with results
 
 	STATISTICS_ENDPOINT = "/monitor/statistics.json" // mesos worker statistics endpoint
@@ -68,25 +67,10 @@ func harvestUsage(usagec chan<- *UsageStats) {
 
 func saveUsage(usage *UsageStats) {
 
-	nodeNameArr := nodeRegexp.FindStringSubmatch(usage.endpoint)
-	nodeName := nodeNameArr[2]
-	fmt.Println(nodeName)
-
-	resultsFile := path.Join(EXPERIMENT_RESULTS_FOLDER, nodeName+"_"+experimentStartTime.String())
-	if _, err := os.Stat(EXPERIMENT_RESULTS_FOLDER); err != nil {
-		if os.IsNotExist(err) {
-			os.Mkdir(EXPERIMENT_RESULTS_FOLDER, 0700)
-		} else {
-			fmt.Printf("Error while accessing folder | %s", err)
-			return
-		}
-	} else if _, err := os.Stat(resultsFile); err != nil {
-		if os.IsNotExist(err) {
-			os.Create(resultsFile)
-		} else {
-			fmt.Printf("Error while accessing folder | %s", err)
-			return
-		}
+	resultsFile, err := createResulsFilename(usage.endpoint)
+	if err != nil {
+		fmt.Printf("Error while making up file name for %s | %s", usage.endpoint, err)
+		return
 	}
 
 	f, err := os.OpenFile(resultsFile, os.O_APPEND|os.O_WRONLY, 0600)
@@ -95,14 +79,29 @@ func saveUsage(usage *UsageStats) {
 	}
 	defer f.Close()
 
-	//future node address regexp: ^(http:\/\/)?([^:]+):?(\d*)\/?
-
 	f.WriteString(usage.usage)
-	fmt.Println("usage written")
+}
+
+// createProperJsonArrays
+// saveUsage function writes multiple arrays into single file
+// this function creates a valid JSON array of arrays of resource usage
+func createProperJsonArrays() {
+	for _, endpoint := range mesosAgents {
+		resultsFile, err := createResulsFilename(endpoint)
+		if err != nil {
+			fmt.Printf("Error while making up file name for %s | %s", endpoint, err)
+			break
+		}
+		createJsonArrayOfArrays(resultsFile)
+	}
 }
 
 func main() {
-	fmt.Println("hello world")
+
+	err := createResultsPath(EXPERIMENT_RESULTS_FOLDER)
+	if err != nil {
+		return
+	}
 
 	usagec := make(chan *UsageStats, len(mesosAgents))
 	tickSignal := time.After(SAMPLING_TIME)
@@ -115,6 +114,7 @@ func main() {
 		case usage := <-usagec:
 			saveUsage(usage)
 		case _ = <-experimentTimeout:
+			createProperJsonArrays()
 			return
 		}
 	}
