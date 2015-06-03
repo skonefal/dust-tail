@@ -7,9 +7,11 @@ Can grab usage statistics from remote nodes and store then locally.
 
 Tested on GO 1.4.2 (min probably 1.3)
 
+```
+go get github.com/skonefal/dust-tail
 go build
-go run dust_tail.go
-
+./dust-tail
+```
 
 ## Usage
 
