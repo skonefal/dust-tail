@@ -30,7 +30,7 @@ const (
 	EXPERIMENT_TIME           = 60 * time.Second       //
 	EXPERIMENT_RESULTS_FOLDER = "results"              // folder with results
 
-	STATISTICS_ENDPOINT = "/monitor/statistics.json" // mesos worker statistics endpoint
+	STATISTICS_ENDPOINT = "/monitor/serenity_statistics.json" // mesos worker statistics endpoint
 )
 
 var mesosAgents = [...]string{
@@ -46,4 +46,4 @@ localhost_2015-06-03 00:37:18.755666406 +0200 CEST
 
 Results are stored as JSON array of arrays of executor resource usage.
 
-Example result: http://pastebin.com/mT5bpDMp
+Example result: http://pastebin.com/YDhu9LZa
