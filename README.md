@@ -13,6 +13,12 @@ go build
 ./dust-tail
 ```
 
+## Mesos Compatibility
+
+Serenity uses raw ResourceUsage message from resource monitor. I added an endopoint /monitor/serenity_statistics.json to Mesos.
+
+I posted this on my branch: ```git clone -b serenity_resource_usage_for_dust_tail https://github.com/skonefal/mesos```
+
 ## Usage
 
 Until external configuration will be completed, you need to hardcode your needs.
