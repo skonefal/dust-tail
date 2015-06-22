@@ -12,10 +12,10 @@ import (
 const (
 	SAMPLING_TIME             = 1 * time.Second        // interval between sampling
 	HTTP_TIMEOUT              = 200 * time.Millisecond // endpoint timeout
-	EXPERIMENT_TIME           = 3 * time.Second        //
+	EXPERIMENT_TIME           = 5 * time.Second        //
 	EXPERIMENT_RESULTS_FOLDER = "results"              // folder with results
 
-	STATISTICS_ENDPOINT = "/monitor/statistics.json" // mesos worker statistics endpoint
+	STATISTICS_ENDPOINT = "/monitor/serenity_statistics.json" // mesos worker statistics endpoint
 )
 
 var mesosAgents = [...]string{

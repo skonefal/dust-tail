@@ -9,31 +9,19 @@ import (
 )
 
 func createJsonArrayOfArrays(file string) {
-	//	fd, err := os.Open(file)
-	//	if err != nil {
-	//		fmt.Println("os.open error" + err.Error())
-	//		return
-	//	}
-
 	bytes, err := ioutil.ReadFile(file)
 	if err != nil {
 		fmt.Println("os.readall error" + err.Error())
 		return
 	}
 
-	//	ioutil.wr
-
 	usage := strings.Replace(string(bytes), "][", "],[", -1)
-	err = ioutil.WriteFile(file, []byte("["+usage+"]"), 0700)
+	usage = strings.Replace(string(bytes), "}{", "},{", -1)
+	err = ioutil.WriteFile(file, []byte("{\"resource_usage\":["+usage+"]}"), 0700)
 	if err != nil {
 		fmt.Println("ioutil.WriteFile error " + err.Error())
 		return
 	}
-
-	//	_, err = fd.WriteString("[" + tempUsage + "]")
-
-	//	fmt.Println("[" + tempUsage + "]")
-
 }
 
 func createResulsFilename(endpoint string) (string, error) {
